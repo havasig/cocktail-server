@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum Alcoholic: String {
+enum Alcoholic: String, Codable, CaseIterable {
     case Alcoholic = "Alcoholic"
     case NonAlcoholic = "Non alcoholic"
     case OptionalAlcohol = "Optional alcohol"
