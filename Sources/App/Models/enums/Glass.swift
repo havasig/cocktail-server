@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum Glass: String {
+enum Glass: String, Codable, CaseIterable {
     case HighballGlass = "Highball glass"
     case CocktailGlass = "Cocktail glass"
     case OldFashionedGlass = "Old-fashioned glass"

@@ -13,10 +13,10 @@ struct DrinkDbDto: Codable {
     var strDrinkAlternate: String?
     var strTags: String
     var strVideo: String?
-    var strCategory: String?
+    var strCategory: String
     var strIBA: String
     var strAlcoholic: String
-    var strGlass: String?
+    var strGlass: String
     var strInstructions: String?
     var strInstructionsES: String?
     var strInstructionsDE: String?
@@ -93,13 +93,14 @@ struct DrinkDbDto: Codable {
 
         drink.dbId = Int(idDrink!)!;
         drink.name = strDrink;
-        //drink.alternate = strDrinkAlternate;
+        drink.alternate = strDrinkAlternate;
         drink.tags = tags;
         drink.videoUrl = strVideo;
         //drink.category = strCategory;
         drink.iba = strIBA;
         drink.alcoholic = Alcoholic(rawValue: strAlcoholic)!
-        //drink.glass = Glass(rawValue: strGlass)!
+        drink.category = Category(rawValue: strCategory)!
+        drink.glass = Glass(rawValue: strGlass)!
         drink.instructions = strInstructions
         drink.instructionsES = strInstructionsES
         drink.instructionsDE = strInstructionsDE

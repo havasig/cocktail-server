@@ -16,6 +16,10 @@ public func configure(_ app: Application) throws {
     ), as: .psql)
 
     app.migrations.add(CreateAlcoholic())
+    app.migrations.add(CreateCategory())
+    app.migrations.add(CreateGlass())
+
+
     app.migrations.add(CreateDrink())
 
 

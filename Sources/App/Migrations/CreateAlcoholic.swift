@@ -8,8 +8,8 @@ struct CreateAlcoholic: Migration {
     func prepare(on database: Database) -> EventLoopFuture<Void> {
         database.enum("alcoholic")
                 .case("Alcoholic")
-                .case("NonAlcoholic")
-                .case("OptionalAlcohol")
+                .case("Non alcoholic")
+                .case("Optional alcohol")
                 .create().transform(to: ())
     }
 

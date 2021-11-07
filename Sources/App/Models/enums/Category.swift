@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum Category: String {
+enum Category: String, Codable, CaseIterable {
     case OrdinaryDrink = "Ordinary Drink"
     case Cocktail = "Cocktail"
     case MilkFloatShake = "Milk / Float / Shake"

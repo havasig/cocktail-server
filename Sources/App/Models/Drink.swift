@@ -9,6 +9,9 @@ import Fluent
 final class Drink: Model, Content {
     static let schema = "drinks"
 
+    init() {
+    }
+
     @ID(key: .id)
     var id: UUID?
 
@@ -25,22 +28,14 @@ final class Drink: Model, Content {
     @Field(key: "video_url")
     var videoUrl: String?
 
-    /*
-
     @Field(key: "alternate")
-    var alternate: Drink?
+    var alternate: String?
 
-    @Field(key: "category")
+    @Enum(key: "category")
     var category: Category
 
-    @Field(key: "glass")
+    @Enum(key: "glass")
     var glass: Glass
-
-
-
-    @Field(key: "dateModified")
-    var dateModified: String?
-     */
 
     @Field(key: "iba")
     var iba: String
@@ -87,6 +82,8 @@ final class Drink: Model, Content {
     @Field(key: "confirmed")
     var confirmed: Bool?
 
-    init() {
-    }
+    /*
+    @Field(key: "dateModified")
+    var dateModified: String?
+     */
 }
