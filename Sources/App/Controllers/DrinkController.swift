@@ -11,6 +11,7 @@ struct DrinkController: RouteCollection {
         drinks.get(use: index)
         drinks.post(use: create)
         drinks.post("db", use: createFromDb)
+        drinks.post("db", use: createFromDb)
         drinks.group(":drinkID") { drink in
             drink.delete(use: delete)
         }

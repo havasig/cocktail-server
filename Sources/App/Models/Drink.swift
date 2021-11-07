@@ -21,7 +21,6 @@ final class Drink: Model, Content {
     @Field(key: "name")
     var name: String
 
-
     @Field(key: "tags")
     var tags: [String]
 
