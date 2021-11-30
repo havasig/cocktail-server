@@ -37,7 +37,7 @@ final class Drink: Model, Content {
     var glass: Glass
 
     @Field(key: "iba")
-    var iba: String
+    var iba: String?
 
     @Enum(key: "alcoholic")
     var alcoholic: Alcoholic

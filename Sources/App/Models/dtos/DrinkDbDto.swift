@@ -11,10 +11,10 @@ struct DrinkDbDto: Codable {
     var idDrink: String?
     var strDrink: String
     var strDrinkAlternate: String?
-    var strTags: String
+    var strTags: String?
     var strVideo: String?
     var strCategory: String
-    var strIBA: String
+    var strIBA: String?
     var strAlcoholic: String
     var strGlass: String
     var strInstructions: String?
@@ -62,7 +62,7 @@ struct DrinkDbDto: Codable {
 
     func toDrink() -> Drink {
         let drink = Drink()
-        let tags = strTags.components(separatedBy: ",")
+        let tags = strTags?.components(separatedBy: ",")
 
         let ingredients: [String] =
                 [strIngredient1, strIngredient2, strIngredient3, strIngredient4,
@@ -94,7 +94,7 @@ struct DrinkDbDto: Codable {
         drink.dbId = Int(idDrink!)!;
         drink.name = strDrink;
         drink.alternate = strDrinkAlternate;
-        drink.tags = tags;
+        drink.tags = tags ?? [];
         drink.videoUrl = strVideo;
         //drink.category = strCategory;
         drink.iba = strIBA;

@@ -18,7 +18,7 @@ struct CreateDrink: Migration {
                         .field("tags", .array(of: .string), .required)
                         .field("video_url", .string)
                         .field("alternate", .string)
-                        .field("iba", .string, .required)
+                        .field("iba", .string)
                         .field("alcoholic", alcoholic, .required)
                         .field("glass", glass, .required)
                         .field("category", category, .required)
