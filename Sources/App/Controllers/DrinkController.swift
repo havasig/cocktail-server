@@ -10,10 +10,9 @@ struct DrinkController: RouteCollection {
         let drinks = routes.grouped("drinks")
         drinks.get(use: index)
         drinks.post(use: create)
-        drinks.post("db", use: createFromDb)
-        drinks.post("db", use: createFromDb)
         drinks.group(":drinkID") { drink in
             drink.delete(use: delete)
+            drink.get(use: getById)
         }
     }
 
@@ -28,14 +27,6 @@ struct DrinkController: RouteCollection {
         }
     }
 
-    func createFromDb(req: Request) throws -> EventLoopFuture<Drink> {
-        let drinkDto = try req.content.decode(DrinkDbDto.self)
-        let drink = drinkDto.toDrink()
-        return drink.save(on: req.db).map {
-            drink
-        }
-    }
-
     func delete(req: Request) throws -> EventLoopFuture<HTTPStatus> {
         Drink.find(req.parameters.get("drinkID"), on: req.db)
                 .unwrap(or: Abort(.notFound))
@@ -43,5 +34,24 @@ struct DrinkController: RouteCollection {
                     $0.delete(on: req.db)
                 }
                 .transform(to: .ok)
+    }
+
+    func getById(req: Request) async throws -> Drink {
+        guard let drinkId = req.parameters.get("drinkID") else {
+            throw Abort(.badRequest)
+        }
+        guard let id = Int(drinkId) else {
+            throw Abort(.badRequest)
+        }
+
+        let drink = try await Drink.query(on: req.db)
+                .filter(\.$dbId == id)
+                .first()
+
+        if drink != nil {
+            return drink!
+        } else {
+            throw Abort(.notFound)
+        }
     }
 }

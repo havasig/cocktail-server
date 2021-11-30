@@ -25,40 +25,48 @@ struct FilterController: RouteCollection {
         }
     }
 
-    func getAllByCategory(req: Request) throws -> EventLoopFuture<[Drink]> {
+    func getAllByCategory(req: Request) async throws -> [SmallDrinkDto] {
         let category: String = req.parameters.get("category")!
         guard let category = Category(rawValue: category) else {
             throw Abort(.badRequest)
         }
-        return Drink.query(on: req.db)
+        return try await Drink.query(on: req.db)
                 .filter(\.$category == category)
-                .all()
+                .all().map { drink in
+                    drink.toSmallDto()
+                }
     }
 
-    func getAllByGlass(req: Request) throws -> EventLoopFuture<[Drink]> {
+    func getAllByGlass(req: Request) async throws -> [SmallDrinkDto] {
         let glass: String = req.parameters.get("glass")!
         guard let glass = Glass(rawValue: glass) else {
             throw Abort(.badRequest)
         }
-        return Drink.query(on: req.db)
+        return try await Drink.query(on: req.db)
                 .filter(\.$glass == glass)
-                .all()
+                .all().map { drink in
+                    drink.toSmallDto()
+                }
     }
 
-    func filterByName(req: Request) throws -> EventLoopFuture<[Drink]> {
-        Drink.query(on: req.db)
+    func filterByName(req: Request) async throws -> [SmallDrinkDto] {
+        try await Drink.query(on: req.db)
                 .filter(\.$name ~~ req.parameters.get("name")!)
-                .all()
+                .all().map { drink in
+                    drink.toSmallDto()
+                }
     }
 
-    func getAllByAlcoholic(req: Request) throws -> EventLoopFuture<[Drink]> {
+    func getAllByAlcoholic(req: Request) async throws -> [SmallDrinkDto] {
         let alcoholic: String = req.parameters.get("alcoholic")!
         guard let alcoholic = Alcoholic(rawValue: alcoholic) else {
             throw Abort(.badRequest)
         }
-        return Drink.query(on: req.db)
+        return try await Drink.query(on: req.db)
                 .filter(\.$alcoholic == alcoholic)
-                .all()
+                .all().map { drink in
+                    drink.toSmallDto()
+                }
     }
 
     func filterByIngredients(req: Request) throws -> EventLoopFuture<[Drink]> {

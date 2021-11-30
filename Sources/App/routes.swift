@@ -4,13 +4,10 @@ import Vapor
 func routes(_ app: Application) throws {
     var databaseInitialized = false
     app.get { req in
-        return "It works!"
+        "It works!"
     }
 
-    app.get("hello") { req -> String in
-        return "Hello, world!"
-    }
-    app.get("init") { req -> String in
+    app.get("db/init") { req -> String in
         if(databaseInitialized) {
             return "Database already initialized"
         }

@@ -85,4 +85,8 @@ final class Drink: Model, Content {
     @Field(key: "dateModified")
     var dateModified: String?
      */
+
+    func toSmallDto() -> SmallDrinkDto {
+        SmallDrinkDto(id: dbId, name: name, thumbUrl: thumbUrl)
+    }
 }
