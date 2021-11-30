@@ -83,14 +83,6 @@ struct DrinkDbDto: Codable {
             measures[i] = measures[i].trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
-        var isConfirmed: Bool? = nil
-        switch strCreativeCommonsConfirmed.lowercased() {
-        case "yes":
-            isConfirmed = true
-        default:
-            isConfirmed = false
-        }
-
         drink.dbId = Int(idDrink!)!;
         drink.name = strDrink;
         drink.alternate = strDrinkAlternate;
@@ -100,7 +92,7 @@ struct DrinkDbDto: Codable {
         drink.iba = strIBA;
         drink.alcoholic = Alcoholic(rawValue: strAlcoholic)!
         drink.category = Category(rawValue: strCategory)!
-        drink.glass = Glass(rawValue: strGlass)!
+        drink.glass = Glass(rawValue: fixGlass(glass: strGlass))!
         drink.instructions = strInstructions
         drink.instructionsES = strInstructionsES
         drink.instructionsDE = strInstructionsDE
@@ -113,9 +105,39 @@ struct DrinkDbDto: Codable {
         drink.measures = measures
         drink.imageUrl = strImageSource
         drink.imageAttribution = strImageAttribution
-        drink.confirmed = isConfirmed
+        drink.confirmed = creativeCommonConfirmed(isConfirmed: strCreativeCommonsConfirmed)
 
         return drink
+    }
+
+    func fixGlass(glass: String) -> String {
+        switch strGlass {
+        case "Collins Glass":
+            return "Collins glass"
+        case "Highball Glass":
+            return "Highball glass"
+        case "Champagne Flute":
+            return "Champagne flute"
+        case "Old-Fashioned glass":
+            return "Old-fashioned glass"
+        case "Shot Glass":
+            return "Shot glass"
+        case "Coffee Mug":
+            return "Coffee mug"
+        case "Cocktail Glass":
+            return "Cocktail glass"
+        default:
+            return strGlass
+        }
+    }
+
+    func creativeCommonConfirmed(isConfirmed: String) -> Bool {
+        switch strCreativeCommonsConfirmed.lowercased() {
+        case "yes":
+            return true
+        default:
+            return false
+        }
     }
 
     enum CodingKeys: String, CodingKey {
@@ -171,5 +193,4 @@ struct DrinkDbDto: Codable {
         case strCreativeCommonsConfirmed
         case dateModified
     }
-
 }

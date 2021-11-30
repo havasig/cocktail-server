@@ -9,7 +9,7 @@ struct CreateGlass: Migration {
         database.enum("glass")
                 .case("Highball glass")
                 .case("Cocktail glass")
-                .case("Old-Fashioned glass")
+                .case("Old-fashioned glass")
                 .case("Whiskey Glass")
                 .case("Collins glass")
                 .case("Pousse cafe glass")
