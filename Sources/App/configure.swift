@@ -7,9 +7,6 @@ public func configure(_ app: Application) throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
-    try app.databases.use(.postgres(url: Environment.databaseURL), as: .psql)
-
-    /*
     if let databaseURL = Environment.get("DATABASE_URL") {
         print("remote db")
         app.databases.use(try .postgres(
@@ -25,7 +22,7 @@ public func configure(_ app: Application) throws {
                 database: Environment.get("DATABASE_NAME") ?? "cocktail_database"
         ), as: .psql)
     }
-     */
+
 
     app.migrations.add(CreateAlcoholic())
     app.migrations.add(CreateCategory())
@@ -35,7 +32,9 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateDrink())
 
 
-    try app.autoMigrate().wait()
+    if app.environment == .development {
+        try app.autoMigrate().wait()
+    }
 
     // register routes
     try routes(app)
