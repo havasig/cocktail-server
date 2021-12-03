@@ -7,7 +7,7 @@ func routes(_ app: Application) throws {
         "It works!"
     }
 
-    app.get("db/init") { req -> String in
+    app.get("init-db") { req -> String in
         if(databaseInitialized) {
             return "Database already initialized"
         }
@@ -42,4 +42,7 @@ func routes(_ app: Application) throws {
 
     try app.register(collection: DrinkController())
     try app.register(collection: FilterController())
+    try app.register(collection: GlassController())
+    try app.register(collection: CategoryController())
+    try app.register(collection: AlcoholicController())
 }

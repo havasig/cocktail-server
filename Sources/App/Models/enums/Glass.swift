@@ -3,8 +3,10 @@
 //
 
 import Foundation
+import Vapor
+import Fluent
 
-enum Glass: String, Codable, CaseIterable {
+enum Glass: String, Codable, CaseIterable, Content {
     case HighballGlass = "Highball glass"
     case CocktailGlass = "Cocktail glass"
     case OldFashionedGlass = "Old-fashioned glass"

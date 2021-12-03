@@ -7,8 +7,8 @@ import Vapor
 
 struct DrinkController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let drinks = routes.grouped("drinks")
-        drinks.get(use: index)
+        let drinks = routes.grouped("drink")
+        drinks.get("all", use: index)
         drinks.post(use: create)
         drinks.group(":drinkID") { drink in
             drink.delete(use: delete)

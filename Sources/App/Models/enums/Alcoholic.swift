@@ -3,8 +3,10 @@
 //
 
 import Foundation
+import Vapor
+import Fluent
 
-enum Alcoholic: String, Codable, CaseIterable {
+enum Alcoholic: String, Codable, CaseIterable, Content {
     case Alcoholic = "Alcoholic"
     case NonAlcoholic = "Non alcoholic"
     case OptionalAlcohol = "Optional alcohol"
