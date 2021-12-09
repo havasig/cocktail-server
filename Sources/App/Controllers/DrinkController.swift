@@ -9,6 +9,8 @@ struct DrinkController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let drinks = routes.grouped("drink")
         drinks.get("all", use: index)
+        drinks.get("top10", use: top10)
+        drinks.get("random", use: random)
         drinks.post(use: create)
         drinks.group(":drinkID") { drink in
             drink.delete(use: delete)
@@ -18,6 +20,23 @@ struct DrinkController: RouteCollection {
 
     func index(req: Request) throws -> EventLoopFuture<[Drink]> {
         Drink.query(on: req.db).all()
+    }
+
+    func random(req: Request) async throws -> Drink {
+        let ids: [Int] = try await Drink.query(on: req.db).all(\.$dbId)
+        let randomInt = Int.random(in: 0..<ids.count)
+
+        return try await Drink.query(on: req.db)
+                .filter(\.$dbId == ids[randomInt])
+                .first()!
+    }
+
+    func top10(req: Request) throws -> EventLoopFuture<[Drink]> {
+        Drink.query(on: req.db)
+                .filter(\.$dbId ~~
+                        [11000, 11001, 11002, 11003, 11004,
+                         11005, 11006, 11007, 11008, 11009])
+                .all()
     }
 
     func create(req: Request) throws -> EventLoopFuture<Drink> {
