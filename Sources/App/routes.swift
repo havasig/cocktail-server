@@ -45,4 +45,5 @@ func routes(_ app: Application) throws {
     try app.register(collection: GlassController())
     try app.register(collection: CategoryController())
     try app.register(collection: AlcoholicController())
+    try app.register(collection: IngredientController())
 }

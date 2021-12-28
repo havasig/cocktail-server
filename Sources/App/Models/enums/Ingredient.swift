@@ -3,8 +3,10 @@
 //
 
 import Foundation
+import Vapor
+import Fluent
 
-enum Ingredient: String {
+enum Ingredient: String, Codable, CaseIterable, Content {
     case Applejack = "Applejack"
     case Gin = "Gin"
     case Scotch = "Scotch"

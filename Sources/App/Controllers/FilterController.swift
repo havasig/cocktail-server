@@ -8,6 +8,8 @@ import Vapor
 struct FilterController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let filter = routes.grouped("filter")
+        filter.post("ingredients", use: filterByIngredients)
+
         filter.group("category") { a in
             a.get(":category", use: getAllByCategory)
         }
@@ -20,9 +22,33 @@ struct FilterController: RouteCollection {
         filter.group("alcoholic") { a in
             a.get(":alcoholic", use: getAllByAlcoholic)
         }
-        filter.group("ingredients") { a in
-            a.post(use: filterByIngredients)
+    }
+
+    func filterByIngredients(req: Request) async throws -> IngredientListResponseDto {
+        let ingredients = try req.content.decode(IngredientListDto.self).ingredients
+
+        let drinks = try await Drink.query(on: req.db).all()
+
+        let result: IngredientListResponseDto = IngredientListResponseDto()
+
+        for drink in drinks {
+            for ingredient in ingredients {
+                drink.ingredients = drink.ingredients.filter { $0 != ingredient }
+            }
+            if drink.ingredients.count == 0 {
+                result.zero.append(drink)
+            } else if drink.ingredients.count == 1 {
+                result.one.append(drink)
+            } else if drink.ingredients.count == 2 {
+                result.two.append(drink)
+            } else if drink.ingredients.count == 3 {
+                result.three.append(drink)
+            } else {
+                result.more.append(drink)
+            }
         }
+
+        return result
     }
 
     func getAllByCategory(req: Request) throws -> EventLoopFuture<[Drink]>{
@@ -61,24 +87,17 @@ struct FilterController: RouteCollection {
                 .all()
     }
 
-    func filterByIngredients(req: Request) throws -> EventLoopFuture<[Drink]> {
-        let ingredients = try req.content.decode(IngredientListDto.self).ingredients
 
-        return Drink.query(on: req.db)
-                .field(\._$id)
-                .field(\.$ingredients)
-                //.filter(\.$ingredients ~~ ["Salt", "Lime juice"])
-                .all()
-                .flatMap { drinks -> EventLoopFuture<[Drink]> in
-                    var ids: [UUID] = []
-                    for drink in drinks {
-                        if drink.ingredients.filter(ingredients.contains).count == ingredients.count {
-                            ids.append(drink.id!)
-                        }
-                    }
-                    return Drink.query(on: req.db)
-                            .filter(\.$id ~~ ids)
-                            .all()
-                }
+
+    func random(req: Request) async throws -> Drink {
+        let ids: [Int] = try await Drink.query(on: req.db).all(\.$dbId)
+        let randomInt = Int.random(in: 0..<ids.count)
+
+        return try await Drink.query(on: req.db)
+                .filter(\.$dbId == ids[randomInt])
+                .first()!
     }
+
+
+
 }
